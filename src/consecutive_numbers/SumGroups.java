@@ -1,18 +1,23 @@
 package consecutive_numbers;
 
 public class SumGroups {
+    int arrayIndex;
+
+    public SumGroups() {
+        arrayIndex = 0;
+    }
 
     public int evaluateArray(int[] collection){
         int[] groupedCollection = collection;
-        int lastCollectionSize = collection.length;
-        int actualCollectionSize = 0;
+        int actualCollectionSize = collection.length;
+        int lastCollectionSize = 0;
 
-        do {
+        while (lastCollectionSize != actualCollectionSize){
+            lastCollectionSize = actualCollectionSize;
             groupedCollection = groupNumbersByType(groupedCollection);
             actualCollectionSize = groupedCollection.length;
+            arrayIndex = 0;
         }
-        while (lastCollectionSize != actualCollectionSize);
-
         return actualCollectionSize;
     }
 
@@ -21,24 +26,55 @@ public class SumGroups {
     }
 
     private int[] groupNumbersByType(int[] collection){
-        int lastUsedNumber;
-        int actualNumber;
-        int indexOfSortedCollection = 0;
+        int evaluationNumber;
         int[] sortedCollection = new int[collection.length];
+        boolean defaultGroupCondition;
+        int auxIndex;
 
-        for (int index = 0; index <= collection.length; index++) {
-           lastUsedNumber = collection[index];
-           actualNumber = collection[index + 1];
+        for (int index = 0; index < collection.length; index++) {
+           evaluationNumber = collection[index];
+           auxIndex = index + 1;
+           defaultGroupCondition = isEven(evaluationNumber);
 
-            if (isEven(actualNumber) && isEven(lastUsedNumber)){
-                sortedCollection[indexOfSortedCollection] += actualNumber + lastUsedNumber;
-                indexOfSortedCollection++;
-            } else if (!isEven(actualNumber) && !isEven(lastUsedNumber)) {
-                sortedCollection[indexOfSortedCollection] += actualNumber + lastUsedNumber;
-                indexOfSortedCollection++;
-            }
+           try {
+               while (isEven(collection[auxIndex]) == defaultGroupCondition){
+                   evaluationNumber += collection[auxIndex];
+                   auxIndex++;
+                   index++;
+               }
+           }catch (IndexOutOfBoundsException ignored){
+
+           }
+
+          add(sortedCollection, evaluationNumber);
         }
-        return sortedCollection;
+
+        return clearCollection(sortedCollection);
     }
 
+    private void add(int[] collection, int number){
+        collection[arrayIndex] = number;
+        arrayIndex++;
+    }
+
+    private int[] clearCollection(int[] collection){
+        int clearedCollectionSize = collection.length;
+        for (int number:
+             collection) {
+            if (number == 0){
+                clearedCollectionSize--;
+            }
+        }
+
+        int[] clearedCollection = new int[clearedCollectionSize];
+        int aux = 0;
+        for (int index = 0; index < clearedCollectionSize; index++) {
+            if (collection[index] != 0){
+                clearedCollection[aux] = collection[index];
+                aux++;
+            }
+        }
+
+        return clearedCollection;
+    }
 }
