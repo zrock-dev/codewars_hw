@@ -31,4 +31,11 @@ public class SolutionTest {
         c.draw(1, 1, 5, 4).fill(3, 3, 'o');
         assertEquals("---------\n|       |\n| xxxxx |\n| xooox |\n| xooox |\n| xxxxx |\n|       |\n|       |\n---------", c.drawCanvas());
     }
+
+    @Test
+    public void drawOutOfBoundsWH(){
+        Canvas canvas = new Canvas(82, 51);
+        canvas.draw(164, 102, 164, 102);
+    }
+
 }

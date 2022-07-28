@@ -1,6 +1,7 @@
 package simple_drawing_board;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Canvas {
     private ArrayList<String> canvas;
@@ -9,7 +10,7 @@ public class Canvas {
     private final int height;
 
     private int[] rectangleCordsInUse;
-    StringBuilder transitiveStringBuilder;
+    private StringBuilder transitiveStringBuilder;
 
     public Canvas(int width, int height) {
         this.height = height;
@@ -19,7 +20,14 @@ public class Canvas {
         drawEmptyCanvas();
     }
 
-    public Canvas draw(int x1, int y1, int x2, int y2) {
+    public Canvas draw(int x1, int y1, int x2, int y2){
+        try {
+            validateDrawBounds(List.of(x1, y1, x2, y2));
+            validateCoords(x1, x2, y1, y2);
+        }catch (IllegalArgumentException exception){
+            exception.printStackTrace();
+        }
+
         if (y1 == y2){
             drawHLine(x1, x2, y1, 'x');
         } else if (x1 == x2) {
@@ -118,6 +126,21 @@ public class Canvas {
         canvas = new ArrayList<>(height);
         for (int index = 0; index < height; index++) {
             canvas.add(" ".repeat(width));
+        }
+    }
+
+    private void validateDrawBounds(List<Integer> coords) throws IllegalArgumentException{
+        for (int cord:
+             coords) {
+            if (cord < 0 || cord > width || cord > height){
+                throw new IllegalArgumentException();
+            }
+        }
+    }
+
+    private void validateCoords(int x1, int x2, int y1, int y2) throws IllegalArgumentException{
+        if (x1 == x2 && y1 == y2){
+            throw new IllegalArgumentException();
         }
     }
 }
