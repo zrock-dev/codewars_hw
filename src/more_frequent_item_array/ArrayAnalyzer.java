@@ -20,13 +20,8 @@ public class ArrayAnalyzer {
 
         for (Integer numberInArray:
              collection) {
-            Integer number = occurrencesOfNumbers.get(numberInArray);
 
-            if (number == null){
-                occurrencesOfNumbers.put(numberInArray, 1);
-            }else {
-                occurrencesOfNumbers.put(numberInArray, number + 1);
-            }
+            occurrencesOfNumbers.merge(numberInArray, 1, Integer::sum);
         }
 
         return occurrencesOfNumbers.entrySet()
