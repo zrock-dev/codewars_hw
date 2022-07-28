@@ -8,8 +8,8 @@ class ArrayAnalyzerTest {
     @Test
     public void tests() {
         ArrayAnalyzer arrayAnalyzer = new ArrayAnalyzer();
-        assertEquals(2, arrayAnalyzer.analyzeArray(new int[] {3, -1, -1}));
-        assertEquals(5, arrayAnalyzer.analyzeArray(new int[] {3, -1, -1, -1, 2, 3, -1, 3, -1, 2, 4, 9, 3}));
+        assertEquals(2, arrayAnalyzer.mostFrequentItemCount(new int[] {3, -1, -1}));
+        assertEquals(5, arrayAnalyzer.mostFrequentItemCount(new int[] {3, -1, -1, -1, 2, 0, -1, 3, -1, 2, 4, 9, 3}));
     }
 
 }
