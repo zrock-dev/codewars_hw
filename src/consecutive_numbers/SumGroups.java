@@ -1,78 +1,65 @@
 package consecutive_numbers;
 
+import static consecutive_numbers.Utils.addToCollection;
+import static consecutive_numbers.Utils.restartIndexCollection;
+
 public class SumGroups {
-    int arrayIndex;
 
-    public SumGroups() {
-        arrayIndex = 0;
-    }
+    public int evaluateArray(int[] collection) {
+        int[] sortedCollection = collection;
+        int collectionSize = collection.length;
+        int lastSize = 0;
 
-    public int evaluateArray(int[] collection){
-        int[] groupedCollection = collection;
-        int actualCollectionSize = collection.length;
-        int lastCollectionSize = 0;
-
-        while (lastCollectionSize != actualCollectionSize){
-            lastCollectionSize = actualCollectionSize;
-            groupedCollection = groupNumbersByType(groupedCollection);
-            actualCollectionSize = groupedCollection.length;
-            arrayIndex = 0;
+        while (lastSize != collectionSize) {
+            sortedCollection = sumNumbersByType(sortedCollection);
+            lastSize = collectionSize;
+            collectionSize = sortedCollection.length;
         }
-        return actualCollectionSize;
+        return collectionSize;
     }
 
-    private boolean isEven(int number){
+    private boolean isEven(int number) {
         return number % 2 == 0;
     }
 
-    private int[] groupNumbersByType(int[] collection){
-        int evaluationNumber;
+    private int[] sumNumbersByType(int[] collection) {
+        restartIndexCollection();
+        int currentNumber;
         int[] sortedCollection = new int[collection.length];
-        boolean defaultGroupCondition;
-        int auxIndex;
+        boolean toSumCondition;
+        int nextNumberIndex;
 
         for (int index = 0; index < collection.length; index++) {
-           evaluationNumber = collection[index];
-           auxIndex = index + 1;
-           defaultGroupCondition = isEven(evaluationNumber);
+            nextNumberIndex = index + 1;
+            currentNumber = collection[index];
+            toSumCondition = isEven(currentNumber);
 
-           try {
-               while (isEven(collection[auxIndex]) == defaultGroupCondition){
-                   evaluationNumber += collection[auxIndex];
-                   auxIndex++;
-                   index++;
-               }
-           }catch (IndexOutOfBoundsException ignored){
+            try {
+                while (isEven(collection[nextNumberIndex]) == toSumCondition) {
+                    index++;
+                    currentNumber += collection[nextNumberIndex];
+                    nextNumberIndex++;
+                }
+            }catch (ArrayIndexOutOfBoundsException ignored){}
 
-           }
-
-          add(sortedCollection, evaluationNumber);
+            addToCollection(sortedCollection, currentNumber);
         }
 
-        return clearCollection(sortedCollection);
+        return removeZerosFromCollection(sortedCollection);
     }
 
-    private void add(int[] collection, int number){
-        collection[arrayIndex] = number;
-        arrayIndex++;
-    }
-
-    private int[] clearCollection(int[] collection){
-        int clearedCollectionSize = collection.length;
-        for (int number:
-             collection) {
-            if (number == 0){
-                clearedCollectionSize--;
-            }
+    private int[] removeZerosFromCollection(int[] collection) {
+        int sortedSize = collection.length;
+        for (int number :
+                collection) {
+            if (number == 0) sortedSize--;
         }
 
-        int[] clearedCollection = new int[clearedCollectionSize];
-        int aux = 0;
-        for (int index = 0; index < clearedCollectionSize; index++) {
-            if (collection[index] != 0){
-                clearedCollection[aux] = collection[index];
-                aux++;
-            }
+        int[] clearedCollection = new int[sortedSize];
+        restartIndexCollection();
+        for (int number :
+                collection) {
+            if (number != 0) addToCollection(clearedCollection, number);
         }
 
         return clearedCollection;
